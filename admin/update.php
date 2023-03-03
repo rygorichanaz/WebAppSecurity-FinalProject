@@ -21,7 +21,7 @@ if($_REQUEST['name']) {
 
 	// This is the procedural style to query the database
 	if(mysqli_query($mysqli, $sql) === TRUE){
-		echo "$myname updated successfully!";
+		echo htmlentities($myname) . " updated successfully!";
 	} else {
 		echo "Error: $sql <br>" . mysqli_error($mysqli);
 	}
@@ -36,7 +36,8 @@ $row = mysqli_fetch_array($result);
 
 ?>
 
-<form>
+<!-- Added <div> tag -- Rylee, 3/1/2023 -->
+<div><form>
 	<input type="hidden" name="id" value="<?= $row['id'] ?>" />
 	<table>
 		<tr>
@@ -44,7 +45,7 @@ $row = mysqli_fetch_array($result);
 				<label>Name:</label>
 			</td>
 			<td>
-				<input type="text" name="name" maxLength=64 value="<?= $row['name'] ?>" required />
+				<input type="text" name="name" maxLength=64 value="<?= htmlentities($row['name']) ?>" required />
 			</td>
 		</tr>
 		<tr>
@@ -60,7 +61,7 @@ $row = mysqli_fetch_array($result);
 				<label>Description:</label>
 			</td>
 			<td>
-				<input type="text" name="description" maxLength=256 value="<?= $row['description'] ?>" />
+				<input type="text" name="description" maxLength=256 value="<?= htmlentities($row['description']) ?>" />
 			</td>
 		</tr>
 		<tr>
@@ -68,12 +69,12 @@ $row = mysqli_fetch_array($result);
 				<label>Image Filename:</label>
 			</td>
 			<td>
-				<input type="text" name="image" maxLength=64 value="<?= $row['image'] ?>" />
+				<input type="text" name="image" maxLength=64 value="<?= htmlentities($row['image']) ?>" />
 			</td>
 		</tr>
 	</table>
 	<input type="submit" value="Update Product">
-</form>
+</form></div>
 
 </body>
 </html>

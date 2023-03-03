@@ -20,7 +20,7 @@ if($_REQUEST['name']) {
 
 	// This is the object-oriented style to query the database
 	if($mysqli->query($sql) === TRUE) {
-		echo "Product $myname created successfully!";
+		echo "Product" . htmlentities($myname) . "created successfully!";
 	} else {
 		echo "Error: $sql <br>" . $mysqli->error;
 	}
@@ -29,7 +29,8 @@ if($_REQUEST['name']) {
 
 ?>
 
-<form>
+<!-- Added <div> tag -- Rylee, 3/1/2023 -->
+<div><form>
 	<table>
 		<tr>
 			<td>
@@ -65,7 +66,7 @@ if($_REQUEST['name']) {
 		</tr>
 	</table>
 	<input type="submit" value="Create Product">
-</form>
+</form></div>
 
 <form action="upload.php" method="post" enctype="multipart/form-data">
 	Select image to upload:

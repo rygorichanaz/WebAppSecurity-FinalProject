@@ -18,10 +18,10 @@ include('includes/header.php');
 <br />
 <p>---------</p>
 
-<form action="<?php echo "?".$_SERVER['QUERY_STRING']."&search=$search";?>" method="post">
+<form method="get" rel="search">
 <center>
-	<input type="text" name="search">
-	<input type="submit" value="Search">
+	<input type="text" name="search" maxlength="30" />
+	<input type="submit" value="Search" />
 </center>
 </form>
 
@@ -34,7 +34,7 @@ $search = $_REQUEST['search'];
 $order = $_REQUEST['order'];
 
 if (empty($order)) {
-	$order = 'name';
+	$order = 'id';
 }
 
 // Connect to db
@@ -49,18 +49,23 @@ echo "<table>";
 // Note: Add function to only show update/delete while logged in
 // *DONE*
 while($row = mysqli_fetch_array($result)) {
+	// Grab and sanitize variables
+	$name = htmlentities($row['name']);
+	$description = htmlentities($row['description']);
+
 	// START a new cell
+	// Added <span> tags - Rylee, 3/1/2023
 	echo "<td style='padding-right: 40px' width=400px>";
 	// Display 'name' from db as h2 header
-	echo "<h2>{$row['name']}</h2><br />";
+	echo "<span><h2>{$name}</h2></span><br />";
 	// Write 'description' from db to screen
-	echo "{$row['description']}<br />";
+	echo "<span>{$description}</span><br />";
 	// Display 'image' using url from db
-	echo "<img src='img/{$row['image']}' height=140px /><br />";
+	echo "<span><img src='img/{$row['image']}' height=140px /></span><br />";
 	// Write 'price' from db to screen
-	echo "\${$row['price']}<br />";
+	echo "<span>\${$row['price']}</span><br />";
 	// Create a "Buy Now" button
-	echo "<button onclick='alert('Thanks for purchasing Orange Juice')'>Buy Now</button>";
+	echo "<span><button onclick='alert('Thanks for purchasing Orange Juice')'>Buy Now</button></span>";
 	
 	// Check if user is logged in to admin acct -- If yes, display "update" and "delete" links
 	if($_SESSION['username'] != NULL) {
