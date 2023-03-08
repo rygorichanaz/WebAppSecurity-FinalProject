@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <?php
 session_start();
 require_once "../includes/db.inc.php"; 
@@ -12,19 +13,37 @@ require_once "force_login.inc";
 include('../includes/header.php');
 
 if($_REQUEST['name']) {
+	$sql = "INSERT INTO products (name, price, description, image) VALUES (?, ?, ?, ?)";
+	//$sql = "INSERT INTO products (name, price) VALUES ('$myname', $myprice)";
 
-	$myname = $_REQUEST['name'];
-	$myprice = $_REQUEST['price'];
+	// Prepare the statement
+	if($stmt = mysqli_prepare($mysqli, $sql)){
+		
+		mysqli_stmt_bind_param($stmt, "ssss", $myname, $myprice, $mydescription, $myimage);
 
-	$sql = "INSERT INTO products (name, price) VALUES ('$myname', $myprice)";
+		// Add prepared statement here -- Setup variables
+		$myname = $_REQUEST['name'];
+		$myprice = $_REQUEST['price'];
+		$mydescription = $_REQUEST['description'];
+		$myimage = $_REQUEST['image'];
+		
+		// Run the query
+		if(mysqli_stmt_execute($stmt)){
+			echo "Product " . htmlentities($myname) . " created successfully!";
+		} else {
+			echo "Error: $sql <br>" . $mysqli->error;
+			echo "<br/>Error: Try again or contact the administrator.";
+		}
+	}
+	$result = mysqli_stmt_get_result($stmt);
 
 	// This is the object-oriented style to query the database
-	if($mysqli->query($sql) === TRUE) {
-		echo "Product" . htmlentities($myname) . "created successfully!";
-	} else {
-		echo "Error: $sql <br>" . $mysqli->error;
-	}
-
+	//if($mysqli->query($sql) === TRUE) {
+	//	echo "Product " . htmlentities($myname) . " created successfully!";
+	//} else {
+	//	echo "Error: $sql <br>" . $mysqli->error;
+	//	echo "<br/>Error: Try again or contact the administrator.";
+	//}
 }
 
 ?>
@@ -68,10 +87,13 @@ if($_REQUEST['name']) {
 	<input type="submit" value="Create Product">
 </form></div>
 
+<!-- Add image upload function
 <form action="upload.php" method="post" enctype="multipart/form-data">
 	Select image to upload:
 	<input type="file" name="fileToUpload" id="fileToUpload">
 	<input type="submit" value="Upload Image" name="submit">
 </form>
+-->
+
 </body>
 </html>
