@@ -3,11 +3,11 @@ session_start();
 require_once "../includes/db.inc.php"; 
 require_once "force_login.inc";
 ?>
+
 <html>
 <body>
 
 <?php
-
 include('../includes/header.php');
 
 $myid = $_REQUEST['id'];
@@ -17,14 +17,36 @@ $mydescription = $_REQUEST['description'];
 $myimage = $_REQUEST['image'];
 
 if($_REQUEST['name']) {
-	$sql = "UPDATE products SET name='$myname', price=$myprice, description='$mydescription', image='$myimage' WHERE id=$myid";
+	$sql = "UPDATE products SET name=?, price=?, description=?, image=? WHERE id=?";
+
+	// Prepare the statement
+	if($stmt = mysqli_prepare($mysqli, $sql)){
+		
+		mysqli_stmt_bind_param($stmt, "sssss", $myname, $myprice, $mydescription, $myimage, $myid);
+
+		// Add prepared statement here -- Setup variables
+		$myid = $_REQUEST['id'];
+		$myname = $_REQUEST['name'];
+		$myprice = $_REQUEST['price'];
+		$mydescription = $_REQUEST['description'];
+		$myimage = $_REQUEST['image'];
+		
+		// Run the query
+		if(mysqli_stmt_execute($stmt)){
+			echo "Product " . htmlentities($myname) . " updated successfully!";
+		} else {
+			echo "Error: $sql <br>" . $mysqli->error;
+			echo "<br/>Error: Try again or contact the administrator.";
+		}
+	}
+	$result = mysqli_stmt_get_result($stmt);
 
 	// This is the procedural style to query the database
-	if(mysqli_query($mysqli, $sql) === TRUE){
-		echo htmlentities($myname) . " updated successfully!";
-	} else {
-		echo "Error: $sql <br>" . mysqli_error($mysqli);
-	}
+	//if(mysqli_query($mysqli, $sql) === TRUE){
+	//	echo htmlentities($myname) . " updated successfully!";
+	//} else {
+	//	echo "Error: $sql <br>" . mysqli_error($mysqli);
+	//}
 }
 
 $sql = "SELECT * FROM products WHERE id=$myid";

@@ -18,9 +18,9 @@ include('includes/header.php');
 <br />
 <p>---------</p>
 
-<form method="get" rel="search">
-<center>
-	<input type="text" name="search" maxlength="30" />
+<form method="get" rel="search"><center>
+	<input type="text" name="search" maxlength="300" />
+	<input type="hidden" name="order" value="name" />
 	<input type="submit" value="Search" />
 </center>
 </form>
@@ -38,10 +38,25 @@ if (empty($order)) {
 }
 
 // Connect to db
-$sql = "SELECT * FROM products WHERE name LIKE '%$search%' ORDER BY $order";
+// $sql = "SELECT * FROM products WHERE name LIKE '%$search%' ORDER BY $order";
+$sql = "SELECT * FROM products WHERE name LIKE ? ORDER BY $order";
+
+// Debug code to see SQL Query
+// echo "The query is $sql <br />";
+// REMOVE THE ABOVE LINE AFTER TESTING SQLi
+
+$search = "%{$search}%";
+
+// Prepare the statement
+$stmt = mysqli_prepare($mysqli, $sql);
+mysqli_stmt_bind_param($stmt, "s", $search);
+
+// Run the query
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 
 // This is the procedural style to query the database
-$result = mysqli_query($mysqli, $sql);
+// $result = mysqli_query($mysqli, $sql);
 
 // START table to hold product entries
 echo "<table>";
@@ -65,7 +80,11 @@ while($row = mysqli_fetch_array($result)) {
 	// Write 'price' from db to screen
 	echo "<span>\${$row['price']}</span><br />";
 	// Create a "Buy Now" button
-	echo "<span><button onclick='alert('Thanks for purchasing Orange Juice')'>Buy Now</button></span>";
+	echo "<span><form action='/cart/'>
+    	<input type='hidden' name='product_id' value='{$row['id']}' />
+    	<input type='hidden' name='price' value='{$row['price']}' />
+    	<input type='submit' value='Buy Now' />
+	</form></span>";
 	
 	// Check if user is logged in to admin acct -- If yes, display "update" and "delete" links
 	if($_SESSION['username'] != NULL) {

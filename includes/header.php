@@ -1,3 +1,4 @@
+
 <a href='/'>Home</a> | 
 
 <?php
@@ -9,7 +10,7 @@ if($_SESSION['username'] != NULL) {
     echo "<a href='/admin/login.php'>Login</a>";
 }
 
-?> | <a href='/read.php'>Products</a>
+?> | <a href='/read.php'>Products</a> | <a href='/cart/'>Cart</a>
 
 <hr />
 <br />

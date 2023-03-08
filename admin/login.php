@@ -1,15 +1,26 @@
 <?php
 session_start();
-
 require_once "../includes/db.inc.php";
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
 	$myusername = $_REQUEST['username'];
 	$mypassword = $_REQUEST['password'];
 
+	// $sql = "SELECT * FROM users WHERE username='$myusername' AND password=SHA2('$mypassword', 256)";
 	$sql = "SELECT * FROM users WHERE username='$myusername' AND password=SHA2('$mypassword', 256)";
 
-	$result = mysqli_query($mysqli, $sql);
+	$myusername = "%{$myusername}%";
+	$mypassword = "%{$mypassword}%";
+
+	// Prepare the statement
+	$stmt = mysqli_prepare($mysqli, $sql);
+	mysqli_stmt_bind_param($stmt, "ss", $myusername, $mypassword);
+
+	// Run the query
+	mysqli_stmt_execute($stmt);
+	$result = mysqli_stmt_get_result($stmt);
+
+	// $result = mysqli_query($mysqli, $sql);
 
 	$row = mysqli_fetch_array($result);
 
