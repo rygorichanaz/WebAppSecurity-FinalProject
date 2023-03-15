@@ -3,8 +3,12 @@ session_start();
 require_once "../includes/db.inc.php"; 
 require_once "force_login.inc";
 ?>
-
-<html>
+<!DOCTYPE html>
+<html lang=en>
+<head>
+	<title>Update - Discount Juice</title>
+	<link rel="stylesheet" href="/includes/style.css">
+</head>
 <body>
 
 <?php
@@ -40,13 +44,6 @@ if($_REQUEST['name']) {
 		}
 	}
 	$result = mysqli_stmt_get_result($stmt);
-
-	// This is the procedural style to query the database
-	//if(mysqli_query($mysqli, $sql) === TRUE){
-	//	echo htmlentities($myname) . " updated successfully!";
-	//} else {
-	//	echo "Error: $sql <br>" . mysqli_error($mysqli);
-	//}
 }
 
 $sql = "SELECT * FROM products WHERE id=$myid";
@@ -58,8 +55,7 @@ $row = mysqli_fetch_array($result);
 
 ?>
 
-<!-- Added <div> tag -- Rylee, 3/1/2023 -->
-<div><form>
+<form>
 	<input type="hidden" name="id" value="<?= $row['id'] ?>" />
 	<table>
 		<tr>
@@ -96,7 +92,7 @@ $row = mysqli_fetch_array($result);
 		</tr>
 	</table>
 	<input type="submit" value="Update Product">
-</form></div>
+</form>
 
 </body>
 </html>

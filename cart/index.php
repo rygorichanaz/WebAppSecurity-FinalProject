@@ -18,6 +18,19 @@ if(!empty($myremove_product_id)) {
 
 // If the user sent a product_id, add the quantity to the existing cart quantity
 if(!empty($myproduct_id)) {
+	// Add prepared statement to get price of product from database
+	// Prepare the statement
+	$stmt = mysqli_prepare($mysqli, "SELECT price FROM products WHERE id=?");
+	mysqli_stmt_bind_param($stmt, "i", $myproduct_id);
+
+	// Run the query
+	mysqli_stmt_execute($stmt);
+	$result = mysqli_stmt_get_result($stmt);
+
+	// Get the results of a single row
+	$row = mysqli_fetch_array($result);
+	$myprice = $row['price'];
+
 	$_SESSION['cart'][$myproduct_id][$myprice] += $myquantity;
 }
 
@@ -37,6 +50,7 @@ while($row = mysqli_fetch_array($results)) {
 
 <head>
 	<title>Cart - Discount Juice</title>
+	<link rel="stylesheet" href="/includes/style.css">
 	<style>
 		table {
 			border-collapse: collapse;
@@ -106,9 +120,9 @@ foreach($_SESSION['cart'] as $item_product_id => $item) {
 //END: If-else shopping cart check
 }
 ?>
-
-<p><a href="<?= $_SERVER['HTTP_REFERER'] && (parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH) != parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)) ? $_SERVER['HTTP_REFERER'] : "/" ?>">Continue Shopping</a>
-
+<!-- Quick fix, due to Cart being linked outside of expected page
+<p><a href="//$_SERVER['HTTP_REFERER'] && (parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH) != parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)) ? $_SERVER['HTTP_REFERER'] : "/" ?>">Continue Shopping</a> -->
+<p><a href="../read.php">Continue Shopping</a>
 <?php
 // Only show the "Checkout" button if there are contents in the cart
 if(!empty($_SESSION['cart'])) {

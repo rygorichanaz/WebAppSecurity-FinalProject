@@ -27,7 +27,8 @@ $mysecuritycode = $_REQUEST['securitycode'];
 <html lang=en>
 
 <head>
-	<title>Disco Juice - Checkout</title>
+	<title>Checkout - Discount Juice</title>
+	<link rel="stylesheet" href="/includes/style.css">
 	<style>
 		.error {
 			border: 1px solid red;

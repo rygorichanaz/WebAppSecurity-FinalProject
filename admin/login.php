@@ -20,8 +20,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 	mysqli_stmt_execute($stmt);
 	$result = mysqli_stmt_get_result($stmt);
 
-	// $result = mysqli_query($mysqli, $sql);
-
 	$row = mysqli_fetch_array($result);
 
 	// This is what happens when a user successfully authenticates
@@ -49,7 +47,12 @@ if($_SESSION['username']) {
 
 } else {
 ?>
-<html>
+<!DOCTYPE HTML>
+<html lang=en>
+<head>
+	<title>Login - Discount Juice</title>
+	<link rel="stylesheet" href="/includes/style.css">
+</head>
 <body>
 <?php include('../includes/header.php'); ?>
 <form method="post" action="login.php">

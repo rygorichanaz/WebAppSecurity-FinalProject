@@ -1,4 +1,4 @@
-
+<img src=/img/JuiceShop_Logo.png width=32px/>
 <a href='/'>Home</a> | 
 
 <?php
