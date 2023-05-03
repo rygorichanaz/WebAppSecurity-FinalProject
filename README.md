@@ -16,3 +16,10 @@ In this course I
 - Learned about and implemented Cross Site Request Forgery (CSRF) mitigations, including how to setup session tokens.
 
 All within an 8 week course! Now if only I had taken a PHP and databse course beforehand...
+
+## Requirements
+This application was designed on top of a LAMP stack running:
+- Ubuntu 20.04 LTS
+- Apache/2.4.41 (Ubuntu)
+- MySQL Ver 8.0.32-0ubuntu0.20.04.2
+- PHP 7.4.3-4ubuntu2.18
